@@ -1,44 +1,50 @@
+use std::collections::VecDeque;
+
 use crate::models::{
     block::{Block, Color},
     tetromino::{i::I, j::J, l::L, o::O, s::S, t::T, z::Z, Tetromino, TetrominoDirection},
 };
 
 pub struct TetrominoFactory {
-    seven_bag: Vec<Box<dyn Tetromino>>,
+    seven_bag: VecDeque<Box<dyn Tetromino>>,
     rand: usize,
 }
 
 impl TetrominoFactory {
     pub fn new() -> Self {
         Self {
-            seven_bag: Vec::new(),
+            seven_bag: VecDeque::new(),
             rand: 0,
         }
     }
 
-    pub fn pick_tetromino(&mut self) -> Box<dyn Tetromino> {
-        if let Some(tetromino) = self.seven_bag.pop() {
-            tetromino
-        } else {
-            self.seven_bag = self.new_seven_bag();
-            self.seven_bag.pop().unwrap()
+    pub fn pop(&mut self) -> Box<dyn Tetromino> {
+        if self.seven_bag.len() < 7 {
+            let mut new_seven_bag = self.new_seven_bag();
+            self.seven_bag.append(&mut new_seven_bag);
         }
+        self.seven_bag.pop_front().unwrap()
     }
 
-    fn new_seven_bag(&mut self) -> Vec<Box<dyn Tetromino>> {
+    pub fn next_tetromino(&self, index: usize) -> Vec<Block> {
+        todo!()
+    }
+
+    fn new_seven_bag(&mut self) -> VecDeque<Box<dyn Tetromino>> {
         self.fisher_yates_shuffle(&mut Self::build_seven_tetrominos())
     }
 
     fn fisher_yates_shuffle(
         &mut self,
-        to_shuffle: &mut Vec<Box<dyn Tetromino>>,
-    ) -> Vec<Box<dyn Tetromino>> {
-        let mut ret = Vec::new();
-        for i in (1..=7).rev() {
+        to_shuffle: &mut VecDeque<Box<dyn Tetromino>>,
+    ) -> VecDeque<Box<dyn Tetromino>> {
+        let mut ret = VecDeque::new();
+        let len = to_shuffle.len();
+        for i in (1..=len).rev() {
             let rand = self.linear_congruential_generate();
             let idx = rand % i;
-            let removed = to_shuffle.remove(idx);
-            ret.push(removed);
+            let removed = to_shuffle.remove(idx).unwrap();
+            ret.push_back(removed);
         }
         ret
     }
@@ -51,16 +57,16 @@ impl TetrominoFactory {
 }
 
 impl TetrominoFactory {
-    fn build_seven_tetrominos() -> Vec<Box<dyn Tetromino>> {
-        vec![
-            Box::new(Self::build_default_i()),
-            Box::new(Self::build_default_j()),
-            Box::new(Self::build_default_l()),
-            Box::new(Self::build_default_s()),
-            Box::new(Self::build_default_z()),
-            Box::new(Self::build_default_t()),
-            Box::new(Self::build_default_o()),
-        ]
+    fn build_seven_tetrominos() -> VecDeque<Box<dyn Tetromino>> {
+        let mut ret: VecDeque<Box<dyn Tetromino>> = VecDeque::new();
+        ret.push_back(Box::new(Self::build_default_i()));
+        ret.push_back(Box::new(Self::build_default_j()));
+        ret.push_back(Box::new(Self::build_default_l()));
+        ret.push_back(Box::new(Self::build_default_s()));
+        ret.push_back(Box::new(Self::build_default_z()));
+        ret.push_back(Box::new(Self::build_default_t()));
+        ret.push_back(Box::new(Self::build_default_o()));
+        ret
     }
 
     fn build_default_i() -> I {

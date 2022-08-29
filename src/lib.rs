@@ -31,7 +31,7 @@ impl Tetris {
     fn new() -> Self {
         let field = Field::new(vec![vec![None; 10]; 24]);
         let mut tetromino_factory = TetrominoFactory::new();
-        let tetromino = tetromino_factory.pick_tetromino();
+        let tetromino = tetromino_factory.pop();
 
         let bytes = include_bytes!("./assets/sprites/minos.gif");
         let tetromino_sprites = SpriteBuilder::new(bytes, "gif", 32.0, 32.0);
@@ -68,7 +68,7 @@ impl App for Tetris {
                 // game over
             }
 
-            self.tetromino = self.tetromino_factory.pick_tetromino();
+            self.tetromino = self.tetromino_factory.pop();
             if !self.field.is_vacant(&self.tetromino.blocks()) {
                 // game over
             }

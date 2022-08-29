@@ -101,6 +101,7 @@ version = "0.1.0"
 dependencies = [
  "derive-new",
  "retrospector",
+ "unix-timestamp",
  "wasm-bindgen",
 ]
 
@@ -109,6 +110,12 @@ name = "unicode-ident"
 version = "1.0.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c4f5b37a154999a8f3f98cc23a628d850e154479cd94decf3414696e12e31aaf"
+
+[[package]]
+name = "unix-timestamp"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c8b9fde8aea40edca8646954bbf8c3ac125345fe0ba8549cfb382c153e67bbe3"
 
 [[package]]
 name = "wasm-bindgen"
