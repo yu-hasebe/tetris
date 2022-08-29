@@ -28,29 +28,29 @@ impl Tetromino for J {
     }
     fn blocks(&self) -> Vec<Block> {
         match self.dir() {
-            TetrominoDirection::Left => vec![
-                self.axis().move_(Direction::Left),
-                *self.axis(),
-                self.axis().move_(Direction::Right).move_(Direction::Down),
-                self.axis().move_(Direction::Right),
-            ],
-            TetrominoDirection::Up => vec![
-                self.axis().move_(Direction::Down),
-                *self.axis(),
-                self.axis().move_(Direction::Up),
-                self.axis().move_(Direction::Left).move_(Direction::Down),
-            ],
-            TetrominoDirection::Right => vec![
-                self.axis().move_(Direction::Left),
+            TetrominoDirection::North => vec![
                 self.axis().move_(Direction::Left).move_(Direction::Up),
+                self.axis().move_(Direction::Left),
                 *self.axis(),
                 self.axis().move_(Direction::Right),
             ],
-            TetrominoDirection::Down => vec![
-                self.axis().move_(Direction::Down),
-                *self.axis(),
+            TetrominoDirection::East => vec![
+                self.axis().move_(Direction::Up).move_(Direction::Right),
                 self.axis().move_(Direction::Up),
-                self.axis().move_(Direction::Right).move_(Direction::Up),
+                *self.axis(),
+                self.axis().move_(Direction::Down),
+            ],
+            TetrominoDirection::South => vec![
+                self.axis().move_(Direction::Left),
+                *self.axis(),
+                self.axis().move_(Direction::Right),
+                self.axis().move_(Direction::Right).move_(Direction::Down),
+            ],
+            TetrominoDirection::West => vec![
+                self.axis().move_(Direction::Up),
+                *self.axis(),
+                self.axis().move_(Direction::Down),
+                self.axis().move_(Direction::Down).move_(Direction::Left),
             ],
         }
     }
@@ -74,150 +74,5 @@ impl J {
     }
     fn set_axis(&mut self, axis: Block) {
         self.axis = axis;
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::models::block::Color;
-
-    #[test]
-    fn test_move() {
-        let mut j = build_j_tetromino();
-        j.move_(MoveDirection::Left);
-        assert_eq!(
-            J::new(TetrominoDirection::Right, Block::new(Color::Blue, -1, 0)),
-            j
-        );
-        j.move_(MoveDirection::Right);
-        assert_eq!(
-            J::new(TetrominoDirection::Right, Block::new(Color::Blue, 0, 0)),
-            j
-        );
-        j.move_(MoveDirection::Down);
-        assert_eq!(
-            J::new(TetrominoDirection::Right, Block::new(Color::Blue, 0, -1)),
-            j
-        );
-    }
-
-    #[test]
-    fn test_rotate() {
-        let mut j = build_j_tetromino();
-        j.rotate(RotateDirection::Left);
-        assert_eq!(
-            J::new(TetrominoDirection::Up, Block::new(Color::Blue, 0, 0)),
-            j
-        );
-        j.rotate(RotateDirection::Left);
-        assert_eq!(
-            J::new(TetrominoDirection::Left, Block::new(Color::Blue, 0, 0)),
-            j
-        );
-        j.rotate(RotateDirection::Left);
-        assert_eq!(
-            J::new(TetrominoDirection::Down, Block::new(Color::Blue, 0, 0)),
-            j
-        );
-        j.rotate(RotateDirection::Left);
-        assert_eq!(
-            J::new(TetrominoDirection::Right, Block::new(Color::Blue, 0, 0)),
-            j
-        );
-        j.rotate(RotateDirection::Right);
-        assert_eq!(
-            J::new(TetrominoDirection::Down, Block::new(Color::Blue, 0, 0)),
-            j
-        );
-        j.rotate(RotateDirection::Right);
-        assert_eq!(
-            J::new(TetrominoDirection::Left, Block::new(Color::Blue, 0, 0)),
-            j
-        );
-        j.rotate(RotateDirection::Right);
-        assert_eq!(
-            J::new(TetrominoDirection::Up, Block::new(Color::Blue, 0, 0)),
-            j
-        );
-        j.rotate(RotateDirection::Right);
-        assert_eq!(
-            J::new(TetrominoDirection::Right, Block::new(Color::Blue, 0, 0)),
-            j
-        );
-    }
-
-    #[test]
-    fn test_dry_move() {
-        let mut j = build_j_tetromino();
-        let got = j.dry_move(MoveDirection::Left);
-        j.move_(MoveDirection::Left);
-        assert_eq!(j.blocks(), got);
-        let got = j.dry_move(MoveDirection::Right);
-        j.move_(MoveDirection::Right);
-        assert_eq!(j.blocks(), got);
-        let got = j.dry_move(MoveDirection::Down);
-        j.move_(MoveDirection::Down);
-        assert_eq!(j.blocks(), got);
-    }
-
-    #[test]
-    fn test_dry_rotate() {
-        let mut j = build_j_tetromino();
-        for _ in 0..4 {
-            let got = j.dry_rotate(RotateDirection::Left);
-            j.rotate(RotateDirection::Left);
-            assert_eq!(j.blocks(), got);
-        }
-        for _ in 0..4 {
-            let got = j.dry_rotate(RotateDirection::Right);
-            j.rotate(RotateDirection::Right);
-            assert_eq!(j.blocks(), got);
-        }
-    }
-
-    #[test]
-    fn test_blocks() {
-        let mut j = build_j_tetromino();
-        assert_eq!(build_j_blocks(TetrominoDirection::Right), j.blocks());
-        j.rotate(RotateDirection::Right);
-        assert_eq!(build_j_blocks(TetrominoDirection::Down), j.blocks());
-        j.rotate(RotateDirection::Right);
-        assert_eq!(build_j_blocks(TetrominoDirection::Left), j.blocks());
-        j.rotate(RotateDirection::Right);
-        assert_eq!(build_j_blocks(TetrominoDirection::Up), j.blocks());
-    }
-
-    fn build_j_tetromino() -> J {
-        J::new(TetrominoDirection::Right, Block::new(Color::Blue, 0, 0))
-    }
-
-    fn build_j_blocks(dir: TetrominoDirection) -> Vec<Block> {
-        match dir {
-            TetrominoDirection::Left => vec![
-                Block::new(Color::Blue, -1, 0),
-                Block::new(Color::Blue, 0, 0),
-                Block::new(Color::Blue, 1, -1),
-                Block::new(Color::Blue, 1, 0),
-            ],
-            TetrominoDirection::Up => vec![
-                Block::new(Color::Blue, 0, -1),
-                Block::new(Color::Blue, 0, 0),
-                Block::new(Color::Blue, 0, 1),
-                Block::new(Color::Blue, -1, -1),
-            ],
-            TetrominoDirection::Right => vec![
-                Block::new(Color::Blue, -1, 0),
-                Block::new(Color::Blue, -1, 1),
-                Block::new(Color::Blue, 0, 0),
-                Block::new(Color::Blue, 1, 0),
-            ],
-            TetrominoDirection::Down => vec![
-                Block::new(Color::Blue, 0, -1),
-                Block::new(Color::Blue, 0, 0),
-                Block::new(Color::Blue, 0, 1),
-                Block::new(Color::Blue, 1, 1),
-            ],
-        }
     }
 }

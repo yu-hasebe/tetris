@@ -18,10 +18,10 @@ pub trait Tetromino {
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum TetrominoDirection {
-    Left,
-    Up,
-    Right,
-    Down,
+    North,
+    East,
+    South,
+    West,
 }
 
 #[derive(Clone, Copy, Debug)]
@@ -34,16 +34,16 @@ impl TetrominoDirection {
     fn rotate(&self, rotate_dir: RotateDirection) -> Self {
         match rotate_dir {
             RotateDirection::Left => match self {
-                TetrominoDirection::Left => TetrominoDirection::Down,
-                TetrominoDirection::Down => TetrominoDirection::Right,
-                TetrominoDirection::Right => TetrominoDirection::Up,
-                TetrominoDirection::Up => TetrominoDirection::Left,
+                TetrominoDirection::North => TetrominoDirection::West,
+                TetrominoDirection::West => TetrominoDirection::South,
+                TetrominoDirection::South => TetrominoDirection::East,
+                TetrominoDirection::East => TetrominoDirection::North,
             },
             RotateDirection::Right => match self {
-                TetrominoDirection::Left => TetrominoDirection::Up,
-                TetrominoDirection::Down => TetrominoDirection::Left,
-                TetrominoDirection::Right => TetrominoDirection::Down,
-                TetrominoDirection::Up => TetrominoDirection::Right,
+                TetrominoDirection::North => TetrominoDirection::East,
+                TetrominoDirection::West => TetrominoDirection::North,
+                TetrominoDirection::South => TetrominoDirection::West,
+                TetrominoDirection::East => TetrominoDirection::South,
             },
         }
     }

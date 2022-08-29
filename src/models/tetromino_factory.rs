@@ -64,30 +64,30 @@ impl TetrominoFactory {
     }
 
     fn build_default_i() -> I {
-        I::new(TetrominoDirection::Right, Block::new(Color::Cyan, 5, 20))
+        I::new(TetrominoDirection::South, Block::new(Color::Cyan, 5, 20))
     }
 
     fn build_default_j() -> J {
-        J::new(TetrominoDirection::Right, Block::new(Color::Blue, 4, 20))
+        J::new(TetrominoDirection::South, Block::new(Color::Blue, 4, 20))
     }
 
     fn build_default_l() -> L {
-        L::new(TetrominoDirection::Right, Block::new(Color::Orange, 4, 20))
+        L::new(TetrominoDirection::South, Block::new(Color::Orange, 4, 20))
     }
 
     fn build_default_s() -> S {
-        S::new(TetrominoDirection::Right, Block::new(Color::Green, 4, 20))
+        S::new(TetrominoDirection::South, Block::new(Color::Green, 4, 20))
     }
 
     fn build_default_z() -> Z {
-        Z::new(TetrominoDirection::Right, Block::new(Color::Red, 4, 20))
+        Z::new(TetrominoDirection::South, Block::new(Color::Red, 4, 20))
     }
 
     fn build_default_t() -> T {
-        T::new(TetrominoDirection::Right, Block::new(Color::Purple, 4, 20))
+        T::new(TetrominoDirection::South, Block::new(Color::Purple, 4, 20))
     }
 
     fn build_default_o() -> O {
-        O::new(TetrominoDirection::Right, Block::new(Color::Yellow, 4, 20))
+        O::new(TetrominoDirection::South, Block::new(Color::Yellow, 4, 20))
     }
 }

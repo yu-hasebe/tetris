@@ -28,29 +28,29 @@ impl Tetromino for Z {
     }
     fn blocks(&self) -> Vec<Block> {
         match self.dir() {
-            TetrominoDirection::Left => vec![
-                self.axis().move_(Direction::Left),
-                self.axis().move_(Direction::Down),
+            TetrominoDirection::North => vec![
+                self.axis().move_(Direction::Up).move_(Direction::Left),
+                self.axis().move_(Direction::Up),
                 *self.axis(),
-                self.axis().move_(Direction::Right).move_(Direction::Down),
+                self.axis().move_(Direction::Right),
             ],
-            TetrominoDirection::Up => vec![
+            TetrominoDirection::East => vec![
+                self.axis().move_(Direction::Right).move_(Direction::Up),
+                self.axis().move_(Direction::Right),
+                *self.axis(),
+                self.axis().move_(Direction::Down),
+            ],
+            TetrominoDirection::South => vec![
+                self.axis().move_(Direction::Left),
+                *self.axis(),
+                self.axis().move_(Direction::Down),
+                self.axis().move_(Direction::Down).move_(Direction::Right),
+            ],
+            TetrominoDirection::West => vec![
                 self.axis().move_(Direction::Left).move_(Direction::Down),
                 self.axis().move_(Direction::Left),
                 *self.axis(),
                 self.axis().move_(Direction::Up),
-            ],
-            TetrominoDirection::Right => vec![
-                self.axis().move_(Direction::Left).move_(Direction::Up),
-                *self.axis(),
-                self.axis().move_(Direction::Up),
-                self.axis().move_(Direction::Right),
-            ],
-            TetrominoDirection::Down => vec![
-                self.axis().move_(Direction::Down),
-                *self.axis(),
-                self.axis().move_(Direction::Right),
-                self.axis().move_(Direction::Right).move_(Direction::Up),
             ],
         }
     }
@@ -74,150 +74,5 @@ impl Z {
     }
     fn set_axis(&mut self, axis: Block) {
         self.axis = axis;
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::models::block::Color;
-
-    #[test]
-    fn test_move() {
-        let mut z = build_z_tetromino();
-        z.move_(MoveDirection::Left);
-        assert_eq!(
-            Z::new(TetrominoDirection::Right, Block::new(Color::Red, -1, 0)),
-            z
-        );
-        z.move_(MoveDirection::Right);
-        assert_eq!(
-            Z::new(TetrominoDirection::Right, Block::new(Color::Red, 0, 0)),
-            z
-        );
-        z.move_(MoveDirection::Down);
-        assert_eq!(
-            Z::new(TetrominoDirection::Right, Block::new(Color::Red, 0, -1)),
-            z
-        );
-    }
-
-    #[test]
-    fn test_rotate() {
-        let mut z = build_z_tetromino();
-        z.rotate(RotateDirection::Left);
-        assert_eq!(
-            Z::new(TetrominoDirection::Up, Block::new(Color::Red, 0, 0)),
-            z
-        );
-        z.rotate(RotateDirection::Left);
-        assert_eq!(
-            Z::new(TetrominoDirection::Left, Block::new(Color::Red, 0, 0)),
-            z
-        );
-        z.rotate(RotateDirection::Left);
-        assert_eq!(
-            Z::new(TetrominoDirection::Down, Block::new(Color::Red, 0, 0)),
-            z
-        );
-        z.rotate(RotateDirection::Left);
-        assert_eq!(
-            Z::new(TetrominoDirection::Right, Block::new(Color::Red, 0, 0)),
-            z
-        );
-        z.rotate(RotateDirection::Right);
-        assert_eq!(
-            Z::new(TetrominoDirection::Down, Block::new(Color::Red, 0, 0)),
-            z
-        );
-        z.rotate(RotateDirection::Right);
-        assert_eq!(
-            Z::new(TetrominoDirection::Left, Block::new(Color::Red, 0, 0)),
-            z
-        );
-        z.rotate(RotateDirection::Right);
-        assert_eq!(
-            Z::new(TetrominoDirection::Up, Block::new(Color::Red, 0, 0)),
-            z
-        );
-        z.rotate(RotateDirection::Right);
-        assert_eq!(
-            Z::new(TetrominoDirection::Right, Block::new(Color::Red, 0, 0)),
-            z
-        );
-    }
-
-    #[test]
-    fn test_dry_move() {
-        let mut z = build_z_tetromino();
-        let got = z.dry_move(MoveDirection::Left);
-        z.move_(MoveDirection::Left);
-        assert_eq!(z.blocks(), got);
-        let got = z.dry_move(MoveDirection::Right);
-        z.move_(MoveDirection::Right);
-        assert_eq!(z.blocks(), got);
-        let got = z.dry_move(MoveDirection::Down);
-        z.move_(MoveDirection::Down);
-        assert_eq!(z.blocks(), got);
-    }
-
-    #[test]
-    fn test_dry_rotate() {
-        let mut z = build_z_tetromino();
-        for _ in 0..4 {
-            let got = z.dry_rotate(RotateDirection::Left);
-            z.rotate(RotateDirection::Left);
-            assert_eq!(z.blocks(), got);
-        }
-        for _ in 0..4 {
-            let got = z.dry_rotate(RotateDirection::Right);
-            z.rotate(RotateDirection::Right);
-            assert_eq!(z.blocks(), got);
-        }
-    }
-
-    #[test]
-    fn test_blocks() {
-        let mut z = build_z_tetromino();
-        assert_eq!(build_z_blocks(TetrominoDirection::Right), z.blocks());
-        z.rotate(RotateDirection::Right);
-        assert_eq!(build_z_blocks(TetrominoDirection::Down), z.blocks());
-        z.rotate(RotateDirection::Right);
-        assert_eq!(build_z_blocks(TetrominoDirection::Left), z.blocks());
-        z.rotate(RotateDirection::Right);
-        assert_eq!(build_z_blocks(TetrominoDirection::Up), z.blocks());
-    }
-
-    fn build_z_tetromino() -> Z {
-        Z::new(TetrominoDirection::Right, Block::new(Color::Red, 0, 0))
-    }
-
-    fn build_z_blocks(dir: TetrominoDirection) -> Vec<Block> {
-        match dir {
-            TetrominoDirection::Left => vec![
-                Block::new(Color::Red, -1, 0),
-                Block::new(Color::Red, 0, -1),
-                Block::new(Color::Red, 0, 0),
-                Block::new(Color::Red, 1, -1),
-            ],
-            TetrominoDirection::Up => vec![
-                Block::new(Color::Red, -1, -1),
-                Block::new(Color::Red, -1, 0),
-                Block::new(Color::Red, 0, 0),
-                Block::new(Color::Red, 0, 1),
-            ],
-            TetrominoDirection::Right => vec![
-                Block::new(Color::Red, -1, 1),
-                Block::new(Color::Red, 0, 0),
-                Block::new(Color::Red, 0, 1),
-                Block::new(Color::Red, 1, 0),
-            ],
-            TetrominoDirection::Down => vec![
-                Block::new(Color::Red, 0, -1),
-                Block::new(Color::Red, 0, 0),
-                Block::new(Color::Red, 1, 0),
-                Block::new(Color::Red, 1, 1),
-            ],
-        }
     }
 }
