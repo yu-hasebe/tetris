@@ -27,6 +27,25 @@ struct Tetris {
     updated_at: f64,
 }
 
+impl Tetris {
+    fn new() -> Self {
+        let field = Field::new(vec![vec![None; 10]; 24]);
+        let mut tetromino_factory = TetrominoFactory::new();
+        let tetromino = tetromino_factory.pick_tetromino();
+
+        let bytes = include_bytes!("./assets/sprites/minos.gif");
+        let tetromino_sprites = SpriteBuilder::new(bytes, "gif", 32.0, 32.0);
+        let updated_at = 0.0;
+        Self {
+            field,
+            tetromino_factory,
+            tetromino,
+            tetromino_sprites,
+            updated_at,
+        }
+    }
+}
+
 impl App for Tetris {
     fn update(&mut self, elapsed_time: f64, key_event: &KeyEvent) {
         if elapsed_time - self.updated_at < 100.0 {
@@ -89,25 +108,6 @@ impl App for Tetris {
         }
         for block in self.field.blocks() {
             block.render(renderer, &self.tetromino_sprites);
-        }
-    }
-}
-
-impl Tetris {
-    fn new() -> Self {
-        let field = Field::new(vec![vec![None; 10]; 24]);
-        let mut tetromino_factory = TetrominoFactory::new();
-        let tetromino = tetromino_factory.pick_tetromino();
-
-        let bytes = include_bytes!("./assets/sprites/minos.gif");
-        let tetromino_sprites = SpriteBuilder::new(bytes, "gif", 32.0, 32.0);
-        let updated_at = 0.0;
-        Self {
-            field,
-            tetromino_factory,
-            tetromino,
-            tetromino_sprites,
-            updated_at,
         }
     }
 }
