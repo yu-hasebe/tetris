@@ -38,7 +38,7 @@ impl Tetromino for J {
                 self.axis().move_(Direction::Down),
                 *self.axis(),
                 self.axis().move_(Direction::Up),
-                self.axis().move_(Direction::Right).move_(Direction::Up),
+                self.axis().move_(Direction::Left).move_(Direction::Down),
             ],
             TetrominoDirection::Right => vec![
                 self.axis().move_(Direction::Left),
@@ -204,7 +204,7 @@ mod tests {
                 Block::new(Color::Blue, 0, -1),
                 Block::new(Color::Blue, 0, 0),
                 Block::new(Color::Blue, 0, 1),
-                Block::new(Color::Blue, 1, 1),
+                Block::new(Color::Blue, -1, -1),
             ],
             TetrominoDirection::Right => vec![
                 Block::new(Color::Blue, -1, 0),
