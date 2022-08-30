@@ -52,7 +52,7 @@ impl App for Tetris {
             return;
         }
 
-        if elapsed_time - self.updated_at > 1000.0 || key_event.is_arrow_down_down() {
+        if elapsed_time - self.updated_at > 300.0 || key_event.is_arrow_down_down() {
             let blocks = self.tetromino.dry_move(MoveDirection::Down);
             if self.field.is_vacant(&blocks) {
                 self.tetromino.move_(MoveDirection::Down);
