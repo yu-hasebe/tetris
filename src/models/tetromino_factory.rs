@@ -26,10 +26,6 @@ impl TetrominoFactory {
         self.seven_bag.pop_front().unwrap()
     }
 
-    pub fn next_tetromino(&self, index: usize) -> Vec<Block> {
-        todo!()
-    }
-
     fn new_seven_bag(&mut self) -> VecDeque<Box<dyn Tetromino>> {
         self.fisher_yates_shuffle(&mut Self::build_seven_tetrominos())
     }

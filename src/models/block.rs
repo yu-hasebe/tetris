@@ -1,5 +1,7 @@
+use anyhow::Result;
 use derive_new::new;
-use retrospector::render::{draw_image, Location, Renderer, SpriteBuilder};
+
+use retrospector::render::{draw_image, Location, Renderer, SpriteStore};
 
 #[derive(Clone, Copy, Debug, Eq, new, PartialEq)]
 pub struct Block {
@@ -51,7 +53,7 @@ impl Block {
         &self.y
     }
 
-    pub fn render(&self, renderer: &Renderer, tetromino_sprites: &SpriteBuilder) {
+    pub fn render(&self, renderer: &Renderer, tetromino_sprites: &SpriteStore) -> Result<()> {
         let col = match self.color() {
             Color::Cyan => 1,
             Color::Blue => 2,
@@ -61,8 +63,11 @@ impl Block {
             Color::Purple => 6,
             Color::Yellow => 7,
         };
-        let sprite = tetromino_sprites.sprite(col, 0);
-        let location = Location::new(*self.x() as f64 * 32.0, (19.0 - *self.y() as f64) * 32.0);
-        draw_image(renderer, sprite, location)
+        if let Ok(sprite) = tetromino_sprites.sprite(col, 0) {
+            let location = Location::new(*self.x() as f64 * 32.0, (19.0 - *self.y() as f64) * 32.0);
+            draw_image(renderer, &sprite, location)?;
+        }
+
+        Ok(())
     }
 }

@@ -5,7 +5,7 @@ use std::result::Result;
 use wasm_bindgen::prelude::*;
 
 use retrospector::app::{run, App, AppConfig};
-use retrospector::render::{clear, Renderer, SpriteBuilder};
+use retrospector::render::{clear, Renderer, SpriteStore};
 use retrospector::update::KeyEvent;
 
 use models::field::Field;
@@ -23,7 +23,7 @@ struct Tetris {
     field: Field,
     tetromino_factory: TetrominoFactory,
     tetromino: Box<dyn Tetromino>,
-    tetromino_sprites: SpriteBuilder,
+    tetromino_sprites: SpriteStore,
     updated_at: f64,
 }
 
@@ -34,14 +34,21 @@ impl Tetris {
         let tetromino = tetromino_factory.pop();
 
         let bytes = include_bytes!("./assets/sprites/minos.gif");
-        let tetromino_sprites = SpriteBuilder::new(bytes, "gif", 32.0, 32.0);
-        let updated_at = 0.0;
-        Self {
-            field,
-            tetromino_factory,
-            tetromino,
-            tetromino_sprites,
-            updated_at,
+        match SpriteStore::new(bytes, "gif", 256, 32, 32, 32) {
+            Ok(tetromino_sprites) => {
+                let updated_at = 0.0;
+                Self {
+                    field,
+                    tetromino_factory,
+                    tetromino,
+                    tetromino_sprites,
+                    updated_at,
+                }
+            }
+            Err(e) => {
+                web_sys::console::log_1(&JsValue::from(&e.to_string()));
+                panic!();
+            }
         }
     }
 }
@@ -104,10 +111,10 @@ impl App for Tetris {
     fn render(&self, renderer: &Renderer) {
         clear(renderer);
         for block in self.tetromino.blocks() {
-            block.render(renderer, &self.tetromino_sprites);
+            let _ = block.render(renderer, &self.tetromino_sprites);
         }
         for block in self.field.blocks() {
-            block.render(renderer, &self.tetromino_sprites);
+            let _ = block.render(renderer, &self.tetromino_sprites);
         }
     }
 }

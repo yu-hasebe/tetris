@@ -8,7 +8,13 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
+anyhow = "1.0.63"
 derive-new = "0.5.9"
 wasm-bindgen = "0.2.82"
 retrospector = { git = "https://github.com/yu-hasebe/retrospector.git", branch = "main" }
-unix-timestamp = "0.1.1"
+
+[dependencies.web-sys]
+version = "0.3.44"
+features = [
+  'console',
+]

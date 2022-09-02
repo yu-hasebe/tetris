@@ -3,6 +3,12 @@
 version = 3
 
 [[package]]
+name = "anyhow"
+version = "1.0.63"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a26fa4d7e3f2eebadf743988fc8aec9fa9a9e82611acafd77c1462ed6262440a"
+
+[[package]]
 name = "base64"
 version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -76,8 +82,9 @@ dependencies = [
 [[package]]
 name = "retrospector"
 version = "0.1.0"
-source = "git+https://github.com/yu-hasebe/retrospector.git?branch=main#e59f9a45eb484871529ddb7a7c095e03c03b7a90"
+source = "git+https://github.com/yu-hasebe/retrospector.git?branch=main#19d4d31433980d6129735d98781721d7ee993e54"
 dependencies = [
+ "anyhow",
  "base64",
  "js-sys",
  "wasm-bindgen",
@@ -99,10 +106,11 @@ dependencies = [
 name = "tetris"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "derive-new",
  "retrospector",
- "unix-timestamp",
  "wasm-bindgen",
+ "web-sys",
 ]
 
 [[package]]
@@ -110,12 +118,6 @@ name = "unicode-ident"
 version = "1.0.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c4f5b37a154999a8f3f98cc23a628d850e154479cd94decf3414696e12e31aaf"
-
-[[package]]
-name = "unix-timestamp"
-version = "0.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c8b9fde8aea40edca8646954bbf8c3ac125345fe0ba8549cfb382c153e67bbe3"
 
 [[package]]
 name = "wasm-bindgen"
