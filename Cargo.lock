@@ -82,7 +82,7 @@ dependencies = [
 [[package]]
 name = "retrospector"
 version = "0.1.0"
-source = "git+https://github.com/yu-hasebe/retrospector.git?branch=main#19d4d31433980d6129735d98781721d7ee993e54"
+source = "git+https://github.com/yu-hasebe/retrospector.git?branch=main#1c21f4184497bde70dd9774e61c254b2634e48f6"
 dependencies = [
  "anyhow",
  "base64",
